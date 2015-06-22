@@ -7,9 +7,12 @@ import java.util.Random;
 import org.apache.hadoop.hdfs.server.namenode.FileChecksumServlets.GetServlet;
 
 /**
- * 有1，2，3，4四个网页，计算他们的pagerank的值， 得到的矩阵关系如下：
- * s={{0,0,0,0},{1/3,0,0,1},{1/3,1/2,0,0
- * },{1/3,1/2,1,0}}取alpha=0.85，通过不断的迭代，当q(next
+有1，2，3，4四个网页，计算他们的pagerank的值， 得到的矩阵关系如下：
+0.0,1/2,0.0,0.0,
+1/3,0.0,0.0,1/2,
+1/3,0.0,1.0,1/2,
+1/3,1/2,0.0,0.0,
+ * ，通过不断的迭代，当q(next
  * )和q(current)之间的距离小于0.0000001时，认为已经收敛。pagerank就是特征值为1的特征向量
  * ，1,2,3,4号网页的价值分别为特征向量中对应维的值
  * 
