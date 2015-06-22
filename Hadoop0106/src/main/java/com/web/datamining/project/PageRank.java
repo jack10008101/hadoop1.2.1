@@ -23,20 +23,67 @@ public class PageRank {
 	private static final double DISTANCE = 0.0000001;
 
 	public static void main(String[] args) {
-		System.out.println("alpha的值为：" + ALPHA);
+		//System.out.println("alpha的值为：" + ALPHA);
 		List<Double> q1 = new ArrayList<Double>();
-		q1.add(new Double(1/4));
-		q1.add(new Double(1/4));
-		q1.add(new Double(1/4));
-		q1.add(new Double(1/4));
+		q1.add(new Double(1/4.0));
+		q1.add(new Double(1/4.0));
+		q1.add(new Double(1/4.0));
+		q1.add(new Double(1/4.0));
 		System.out.println("初始化的向量Q为：");
 		printVector(q1);
 		System.out.println("初始化的转移矩阵S为：");
 		//printMatrix(getG(ALPHA));
 		printMatrix(getS());
 		List<Double> pageRank = calPageRank(q1, ALPHA);
+		//List<Double> pageRankResult=calculatePageRankByNoTax(q1);
 		System.out.println("PageRank为：");
 		printVector(pageRank);
+		//printVector(pageRankResult);
+	}
+
+	private static List<Double> calculatePageRankByNoTax(List<Double> q1) {
+		// TODO Auto-generated method stub
+		List<Double> q=null;
+		int count=0;
+		while (true) {
+			q=calculateMatrixMultiple(getS(), q1);
+			double distance=calculateDistance(q1, q);
+			System.out.println("向量q和向量q1之间的distance：" + distance);
+			count++;
+			if (distance<=DISTANCE) {
+				System.out.println("向量q1：");
+				printVector(q1);
+				System.out.println("向量q：");
+				printVector(q);
+				System.out.println("迭代次数为："+count);
+				break;
+			}
+			q1=q;
+		}
+		return q;
+	}
+    /**
+     * 计算矩阵乘以一个向量，结果得到一个N*1维的列向量，v'=M*v,迭代下去直到v得到收敛
+     * @param s 一个矩阵N*N
+     * @param q1 一个列向量N*1
+     * @return 返回一个列向量
+     */
+	private static List<Double> calculateMatrixMultiple(List<List<Double>> s,
+			List<Double> q1) {
+		// TODO Auto-generated method stub
+		if (s == null || q1 == null || s.size() == 0
+				|| (s.get(0).size() != q1.size())) {
+			return null;
+		}
+		List<Double> result = new ArrayList<Double>();
+		for (int i = 0; i < s.size(); i++) {
+			double sum = 0.0;
+			for (int j = 0; j < s.get(i).size(); j++) {
+				sum += s.get(i).get(j).doubleValue() * q1.get(j).doubleValue();
+			}
+			result.add(sum);
+		}
+		return result;
 	}
 
 	private static List<Double> calPageRank(List<Double> q1, double alpha2) {
@@ -198,25 +245,42 @@ public class PageRank {
 	private static List<List<Double>> getS() {
 		// TODO Auto-generated method stub
 		List<Double> row1 = new ArrayList<Double>();
-		row1.add(new Double(0));
+	//这部分代码是抽税法使用
+	    row1.add(new Double(0));
 		row1.add(new Double(1/2.0));
 		row1.add(new Double(0));
 		row1.add(new Double(0));
+/*		row1.add(new Double(0));//非抽税法转移矩阵数据
+		row1.add(new Double(1/2.0));
+		row1.add(new Double(1));
+		row1.add(new Double(0));*/
 		List<Double> row2 = new ArrayList<Double>();
 		row2.add(new Double(1 / 3.0));
 		row2.add(new Double(0));
 		row2.add(new Double(0));
 		row2.add(new Double(1/2.0));
+/*		row2.add(new Double(1 / 3.0));
+		row2.add(new Double(0));
+		row2.add(new Double(0));
+		row2.add(new Double(1/2.0));*/
 		List<Double> row3 = new ArrayList<Double>();
 		row3.add(new Double(1 / 3.0));
 		row3.add(new Double(0));
 		row3.add(new Double(1));
 		row3.add(new Double(1/2.0));
+/*		row3.add(new Double(1 / 3.0));
+		row3.add(new Double(0));
+		row3.add(new Double(0));
+		row3.add(new Double(1/2.0));*/
 		List<Double> row4 = new ArrayList<Double>();
-		row4.add(new Double(1 / 3.0));
+        row4.add(new Double(1 / 3.0));
 		row4.add(new Double(1 / 2.0));
 		row4.add(new Double(0));
 		row4.add(new Double(0));
+	/*	row4.add(new Double(1 / 3.0));
+		row4.add(new Double(1 / 2.0));
+		row4.add(new Double(0));
+		row4.add(new Double(0));*/
 		List<List<Double>> result = new ArrayList<List<Double>>();
 		result.add(row1);
 		result.add(row2);
